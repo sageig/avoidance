@@ -94,6 +94,9 @@ void LocalPlannerNodelet::InitializeNodelet() {
   // initialize visualization topics
   visualizer_.initializePublishers(nh_);
 
+  // initialize mavros parameter service client
+  mavros_param_set_ = nh_.serviceClient<mavros_msgs::ParamSet>("/mavros/param/set");
+
   // pass initial goal into local planner
   local_planner_->applyGoal();
 
@@ -123,6 +126,7 @@ void LocalPlannerNodelet::readParams() {
   nh_private_.param<double>(nodelet::Nodelet::getName() + "/goal_y_param", goal_d.y(), 0.0);
   nh_private_.param<double>(nodelet::Nodelet::getName() + "/lgoal_z_param", goal_d.z(), 0.0);
   nh_private_.param<bool>(nodelet::Nodelet::getName() + "/accept_goal_input_topic", accept_goal_input_topic_, false);
+  nh_private_.param<bool>(nodelet::Nodelet::getName() + "/make_2d", make_2d_, true);
   goal_position_ = goal_d.cast<float>();
 
   std::vector<std::string> camera_topics;
@@ -308,6 +312,18 @@ void LocalPlannerNodelet::calculateWaypoints(bool hover) {
 
   // send waypoints to mavros
   mavros_msgs::Trajectory obst_free_path = {};
+  mavros_msgs::ParamSet set_msg;
+  if (make_2d_ && !is_takeoff_waypoint_) {
+    result.position_wp(2) = takeoff_altitude_;
+    set_msg.request.param_id = "NAV_MC_ALT_RAD";
+    set_msg.request.value.real = 10;
+    mavros_param_set_.call(set_msg);
+  } else if (make_2d_) {
+    takeoff_altitude_ = goal_position_(2);
+    set_msg.request.param_id = "NAV_MC_ALT_RAD";
+    set_msg.request.value.real = 0.2;
+    mavros_param_set_.call(set_msg);
+  }
   transformToTrajectory(obst_free_path, toPoseStamped(result.position_wp, result.orientation_wp),
                         toTwist(result.linear_velocity_wp, result.angular_velocity_wp));
   mavros_pos_setpoint_pub_.publish(toPoseStamped(result.position_wp, result.orientation_wp));
@@ -332,6 +348,18 @@ void LocalPlannerNodelet::updateGoalCallback(const visualization_msgs::MarkerArr
   if (accept_goal_input_topic_ && msg.markers.size() > 0) {
     prev_goal_position_ = goal_position_;
     goal_position_ = toEigen(msg.markers[0].pose.position);
+    mavros_msgs::ParamSet set_msg;
+    if (make_2d_ && !is_takeoff_waypoint_) {
+      goal_position_(2) = takeoff_altitude_;
+      set_msg.request.param_id = "NAV_MC_ALT_RAD";
+      set_msg.request.value.real = 10;
+      mavros_param_set_.call(set_msg);
+    } else if (make_2d_) {
+      takeoff_altitude_ = goal_position_(2);
+      set_msg.request.param_id = "NAV_MC_ALT_RAD";
+      set_msg.request.value.real = 0.2;
+      mavros_param_set_.call(set_msg);
+    }
     new_goal_ = true;
   }
 }
@@ -341,6 +369,7 @@ void LocalPlannerNodelet::fcuInputGoalCallback(const mavros_msgs::Trajectory& ms
       ((avoidance::toEigen(msg.point_2.position) - avoidance::toEigen(goal_mission_item_msg_.pose.position)).norm() >
        0.01) ||
       !std::isfinite(goal_position_(0)) || !std::isfinite(goal_position_(1));
+  mavros_msgs::ParamSet set_msg;
   if ((msg.point_valid[0] == true) && update) {
     new_goal_ = true;
     prev_goal_position_ = goal_position_;
@@ -348,11 +377,32 @@ void LocalPlannerNodelet::fcuInputGoalCallback(const mavros_msgs::Trajectory& ms
     desired_velocity_ = toEigen(msg.point_1.velocity);
     is_land_waypoint_ = (msg.command[0] == static_cast<int>(MavCommand::MAV_CMD_NAV_LAND));
     is_takeoff_waypoint_ = (msg.command[0] == static_cast<int>(MavCommand::MAV_CMD_NAV_TAKEOFF));
+    if (make_2d_ && !is_takeoff_waypoint_) {
+      goal_position_(2) = takeoff_altitude_;
+      set_msg.request.param_id = "NAV_MC_ALT_RAD";
+      set_msg.request.value.real = 10;
+      mavros_param_set_.call(set_msg);
+    } else if (make_2d_) {
+      takeoff_altitude_ = goal_position_(2);
+      set_msg.request.param_id = "NAV_MC_ALT_RAD";
+      set_msg.request.value.real = 0.2;
+      mavros_param_set_.call(set_msg);
+    }
   }
   if (msg.point_valid[1] == true) {
     goal_mission_item_msg_.pose.position = msg.point_2.position;
     if (msg.command[1] == UINT16_MAX) {
-      goal_position_ = toEigen(msg.point_2.position);
+      if (make_2d_ && !is_takeoff_waypoint_) {
+        goal_position_(2) = takeoff_altitude_;
+        set_msg.request.param_id = "NAV_MC_ALT_RAD";
+        set_msg.request.value.real = 10;
+        mavros_param_set_.call(set_msg);
+      } else if (make_2d_) {
+        takeoff_altitude_ = goal_position_(2);
+        set_msg.request.param_id = "NAV_MC_ALT_RAD";
+        set_msg.request.value.real = 0.2;
+        mavros_param_set_.call(set_msg);
+      }
       desired_velocity_ << NAN, NAN, NAN;
     }
     desired_yaw_setpoint_ = msg.point_2.yaw;

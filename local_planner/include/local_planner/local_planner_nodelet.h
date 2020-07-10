@@ -15,6 +15,7 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <mavros_msgs/Altitude.h>
 #include <mavros_msgs/CompanionProcessStatus.h>
+#include <mavros_msgs/ParamSet.h>
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 #include <mavros_msgs/Trajectory.h>
@@ -198,6 +199,8 @@ class LocalPlannerNodelet : public nodelet::Nodelet {
   ros::Subscriber goal_topic_sub_;
   ros::Subscriber distance_sensor_sub_;
 
+  ros::ServiceClient mavros_param_set_;
+
   ros::CallbackQueue pointcloud_queue_;
   ros::CallbackQueue main_queue_;
 
@@ -223,6 +226,7 @@ class LocalPlannerNodelet : public nodelet::Nodelet {
   Eigen::Vector3f desired_velocity_;
   Eigen::Vector3f goal_position_;
   Eigen::Vector3f prev_goal_position_;
+  double takeoff_altitude_;
 
   NavigationState nav_state_ = NavigationState::none;
 
@@ -248,6 +252,7 @@ class LocalPlannerNodelet : public nodelet::Nodelet {
   bool accept_goal_input_topic_;
   bool is_land_waypoint_{false};
   bool is_takeoff_waypoint_{false};
+  bool make_2d_ = false;
   double spin_dt_;
   int path_length_ = 0;
   std::vector<float> algo_time;
