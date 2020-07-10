@@ -1,0 +1,120 @@
+
+ - type: "mesh"
+   name: "fastfood"
+   frame_id: "local_origin"
+   mesh_resource: "model://fast_food/meshes/fast_food.dae"
+   position: [5.0, -13.0, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "dumpster"
+   frame_id: "local_origin"
+   mesh_resource: "model://dumpster/meshes/dumpster.dae"
+   position: [-8.5, -12, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_1"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_1/meshes/house_1.dae"
+   position: [13, 16.0, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_1b"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_1/meshes/house_1.dae"
+   position: [13.0, 0.0, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_2"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_2/meshes/house_2.dae"
+   position: [0.0, 15.0, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_2"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_2/meshes/house_2.dae"
+   position: [0.0, -5.0, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_3"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_3/meshes/house_3.dae"
+   position: [-8.0, 14.0, 0.0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_3b"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_3/meshes/house_3.dae"
+   position: [-8.0, 0.0, 0.0]
+   orientation: [ 0, 0, 0.7068252, 0.7073883]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_3c"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_3/meshes/house_3.dae"
+   position: [-17.0, -7.0, 0.0]
+   orientation: [ 0, 0, 0.7068252, 0.7073883]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_3d"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_3/meshes/house_3.dae"
+   position: [-17.0, 3.0, 0.0]
+   orientation: [ 0, 0, 0.7068252, 0.7073883]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "house_3e"
+   frame_id: "local_origin"
+   mesh_resource: "model://house_3/meshes/house_3.dae"
+   position: [-17.0, 13.0, 0.0]
+   orientation: [ 0, 0, 0.7068252, 0.7073883]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "office_bld_1"
+   frame_id: "local_origin"
+   mesh_resource: "model://office_building/meshes/office_building.dae"
+   position: [30.0, 10.0, 0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "office_bld_2"
+   frame_id: "local_origin"
+   mesh_resource: "model://office_building/meshes/office_building.dae"
+   position: [19.0, -29.0, 0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "office_bld_3"
+   frame_id: "local_origin"
+   mesh_resource: "model://office_building/meshes/office_building.dae"
+   position: [-2.0, -29.0, 0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
+
+ - type: "mesh"
+   name: "lamp_post"
+   frame_id: "local_origin"
+   mesh_resource: "model://lamp_post/meshes/lamp_post.dae"
+   position: [-15.0, -5.0, 0]
+   orientation: [0.0, 0.0, 0.0, 1.0]
+   scale: [1.0, 1.0, 1.0]
